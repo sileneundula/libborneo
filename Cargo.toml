@@ -9,3 +9,9 @@ edition = "2021"
 libsumatracrypt-rs = "0.5.0"
 
 serde = { version = "1.0", features = ["derive"] }
+
+libp2p = { version = "0.54.1", features = ["tcp", "tls", "dns", "async-std", "noise", "yamux", "websocket", "ping", "macros"]}
+
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+async-std = "1.10.0"  # For async execution
