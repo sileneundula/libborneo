@@ -5,7 +5,8 @@ use crate::internals::serde::{Serialize,Deserialize};
 use crate::internals::crypto::blake3;
 
 use borsys::block::*;
-use borsys::payment::boreamount;
+use borsys::payment::BoreAmount;
+
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Block {
@@ -13,7 +14,7 @@ pub struct Block {
     pub previous: BorneoBlockHash,
     pub balance: BoreAmount,
     pub nonce: u64,
-    pub signature: Bore,
+    pub signature: SignatureED25519,
 }
 
 impl Block {
