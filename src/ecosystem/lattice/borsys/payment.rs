@@ -5,4 +5,4 @@ pub const boreblockreward: u64 = 50_000_000_000u64;
 
 
 
-pub struct boreamount(u64);
+pub struct BoreAmount(u64);
