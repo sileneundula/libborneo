@@ -1,15 +1,20 @@
+use crate::ecosystem::lattice::borsys::block::*;
+use std::collections::HashMap;
+
 pub struct BorneoLatticeFullInit {    
     Accounts: Vec<BorneoAccount>,
-    Accounts_Map: HashMap<BorneoAccount>,
+    Accounts_Map: HashMap<BorneoAccount,BorneoAccount>,
     Delegates: Vec<BorneoAccount>,
-    Delegates_Map: HashMap<BorneoAccount>,
-    
-    num_of_delegates: u16,
+    Delegates_Map: HashMap<BorneoAccount,BorneoAccount>,
 }
 
-pub struct SumatraDelegatedChainsFullInit {
-    csprng_chain: Vec<>
-    domain_status: Vec<>
+pub struct SumatraPivotChainsFullInit {
+    num_of_chains: u16,
+    
+}
+
+pub struct YopoDelegateChainsFullInit {
+
 }
 
 pub struct SumatraPublicChainFullInit {

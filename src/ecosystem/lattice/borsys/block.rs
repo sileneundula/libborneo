@@ -20,3 +20,9 @@ pub struct SignatureED25519(String);
 
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct SignatureDillyn(String);
+
+impl BorneoBlockHash {
+    pub fn new<T: AsRef<str>>(s: T) -> Self {
+        return Self(s.as_ref().to_string())
+    }
+}

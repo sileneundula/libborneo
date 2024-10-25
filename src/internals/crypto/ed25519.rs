@@ -1,0 +1,1 @@
+pub use libsumatracrypt_rs::signatures::ed25519::*;
