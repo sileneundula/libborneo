@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use super::account::AccountChain;
+
 #[derive(Debug)]
 pub struct BlockLattice {
     pub chains: HashMap<String, AccountChain>,
