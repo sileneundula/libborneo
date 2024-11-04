@@ -2,6 +2,9 @@
 use crate::internals::serde::{Serialize,Deserialize};
 
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
+pub struct BlockID(u64);
+
+#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoAccount(String);
 
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]

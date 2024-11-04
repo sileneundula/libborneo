@@ -2,7 +2,7 @@
 /// 
 /// Structure is of a register-based vm.
 struct AilisCPU {
-    registers: [i32;4],
+    registers: [i32;32],
     pc: usize,
     halted: bool,
 }
