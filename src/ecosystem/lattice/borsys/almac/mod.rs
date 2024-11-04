@@ -57,6 +57,10 @@ pub enum AlmacTxType {
     // Almac
     InitGeneralChain(u16),
     InitGeneralBlock(u32),
+    
+    InitStorageUnit,
+    InitNamespace,
+    InitDecDB,
 }
 
 
