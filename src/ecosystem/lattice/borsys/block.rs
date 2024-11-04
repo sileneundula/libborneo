@@ -16,6 +16,12 @@ pub struct BorneoPublicKey(String);
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoNonce(u64);
 
+#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
+pub struct BorneoLinkBlock(String);
+
+#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
+pub struct BorneoContentsHash(String);
+
 // ======Signatures=====
 
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
