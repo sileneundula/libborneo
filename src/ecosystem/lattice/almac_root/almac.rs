@@ -2,12 +2,13 @@
 
 use crate::ecosystem::lattice::borsys::block::*;
 use crate::ecosystem::lattice::borsys::almac::*;
+use crate::internals::crypto::blake2b::BorneoBLAKE2B;
 
 pub struct AlmacBlockHeader {
     bhash: String,
 }
 
-pub struct AlmacBlock {
+pub struct AlmacBlockContents {
     id: BlockID,
     ba: BorneoAccount,
     pk: BorneoPublicKey,
@@ -36,4 +37,27 @@ pub struct AlmacContainerBlock<T> {
 pub struct AlmacBlockFooter {
     contentshash: BorneoContentsHash,
     signature: SignatureED25519,
+}
+
+impl AlmacBlockContents {
+    pub fn new(id: BlockID, ba: BorneoAccount, pk: BorneoPublicKey, link_hash: BorneoBlockHash, to: BorneoAccount, nonce: BorneoNonce, version: AlmacVersion, almac_def_type: AlmacDefinitiveType, almac_tx: AlmacTxType) -> Self {
+        Self {
+            id: id,
+            ba: ba,
+            pk: pk,
+            entry_link_block: None,
+            link_hash: link_hash,
+            to: to,
+            nonce: nonce,
+            
+            almac_version: version,
+            almac_definitive_type: almac_def_type,
+            almac_tx: almac_tx
+        }
+    }
+    pub fn hash(&self) -> String {
+        let serialized = serde_json::to_string(self).expect("Failed To Serialize");
+        let hash = BorneoBLAKE2B::new(serialized.as_bytes(),40usize);
+        return hash
+    }
 }

@@ -57,17 +57,19 @@ pub enum AlmacTxType {
     // Almac
     InitGeneralChain(u16),
     InitGeneralBlock(u32),
-    
+
     InitStorageUnit,
     InitNamespace,
     InitDecDB,
+    InitWebICD,
+    InitBridge,
 }
 
 
 /*
-1. Init-Chain
-2. Init-Block
-10. Register
+CHAINS:
+1. Payment, Voting, 
+2. Certificate, Projects
 
 Have a custom blockchain which only use is to serve to collect the user data and act as entry points
 
