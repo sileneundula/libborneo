@@ -22,6 +22,15 @@ pub struct BorneoLinkBlock(String);
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoContentsHash(String);
 
+#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
+pub struct BorneoContainerHash(String);
+
+#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
+pub struct BorneoFooterHash(String);
+
+#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
+pub struct BorneoSidechainHash(String);
+
 // ======Signatures=====
 
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]

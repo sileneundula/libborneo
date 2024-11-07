@@ -4,6 +4,13 @@ use crate::ecosystem::lattice::borsys::block::*;
 use crate::ecosystem::lattice::borsys::almac::*;
 use crate::internals::crypto::blake2b::BorneoBLAKE2B;
 
+/*
+MULTICAST
+
+A multicast can be done to several chains
+
+*/
+
 pub struct AlmacBlockHeader {
     bhash: String,
 }
@@ -36,6 +43,10 @@ pub struct AlmacContainerBlock<T> {
 
 pub struct AlmacBlockFooter {
     contentshash: BorneoContentsHash,
+    containerhash: BorneoContainerHash,
+    sidehash: BorneoSidechainHash,
+
+    footerhash: BorneoFooterHash,
     signature: SignatureED25519,
 }
 
