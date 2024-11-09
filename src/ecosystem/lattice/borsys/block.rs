@@ -1,5 +1,7 @@
 // Account Data
 use crate::internals::serde::{Serialize,Deserialize};
+use crate::internals::crypto::blake2b::BorneoBLAKE2B;
+use crate::internals::encoding::bs32::base32;
 
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BlockID(u64);
@@ -40,7 +42,35 @@ pub struct SignatureED25519(String);
 pub struct SignatureDillyn(String);
 
 impl BorneoBlockHash {
-    pub fn new<T: AsRef<str>>(s: T) -> Self {
+    /// Must be in hexadecimal and 80 characters long.
+    /// 
+    /// TODO: Add Validity check
+    pub fn from_str<T: AsRef<str>>(s: T) -> Self {
+        assert_eq!(s.as_ref().len(),80usize);
+        
         return Self(s.as_ref().to_string())
+    }
+}
+
+impl BorneoAccount {
+    /// Prefixes Each Account Address With BA59_
+    pub const BAPREFIX: &str = "BA59";
+    pub const BAPREFIX_UNDERSCORE: &str = "_";
+
+    pub fn from_str<T: AsRef<str>>(s: T) -> Self {
+        return Self(s.as_ref().to_string())
+    }
+    pub fn get_from_ed25519_pk<T: AsRef<str>>(s: T) -> Self {
+        let mut borneoaccount: String = String::new();
+        
+        let res = BorneoBLAKE2B::new(s.as_ref(), 40);
+        let decoded_bytes = hex::decode(res).expect("[GET FROM ED@5519] Failed To Convert From Hex");
+        let bs32_z_encoded = base32::encode(base32::Alphabet::Z, &decoded_bytes);
+
+        borneoaccount.push_str(Self::BAPREFIX);
+        borneoaccount.push_str(Self::BAPREFIX_UNDERSCORE);
+        borneoaccount.push_str(&bs32_z_encoded);
+
+        return Self(borneoaccount)
     }
 }

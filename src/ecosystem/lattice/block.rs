@@ -17,13 +17,15 @@ pub struct Block {
 }
 
 impl Block {
+    /*
     pub fn new(account: String, previous: String, balance: u64, signature: String) -> Self {
         Block { account, previous, balance, signature }
     }
+    */
 
     pub fn hash(&self) -> BorneoBlockHash {
-        let serialized = serde_json::to_string(self).unwrap()
+        let serialized = serde_json::to_string(self).unwrap();
         let hash = blake2b::BorneoBLAKE2B::new(serialized.as_bytes(), 40usize);
-        return BorneoBlockHash::new(hash)
+        return BorneoBlockHash::from_str(hash)
     }
 }

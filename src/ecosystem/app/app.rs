@@ -17,8 +17,8 @@ pub struct YopoDelegateChainsFullInit {
 
 }
 
-pub struct SumatraPublicChainFullInit {
-    Blocks: Vec
+pub struct SumatraPublicChainFullInit<T> {
+    Blocks: Vec<T>
 }
 
 /* =====TASKS=====
@@ -29,8 +29,3 @@ Provide VDF
 
 Nodes can accept or decline to their blockchain
 */
-
-pub struct BorneoApp {
-    Account: Vec
-    
-}

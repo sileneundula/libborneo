@@ -5,8 +5,3 @@
 /// To use a BorneoCrateRootPivot, it must be defined in the lattice as accepting that type of txs for the right chain.
 
 pub struct BorneoCrateRootPivot(String);
-
-pub struct BorneoCrateRepoMetadata {
-    root: 
-    id: u64,
-}

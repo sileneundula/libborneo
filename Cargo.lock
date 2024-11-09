@@ -1701,7 +1701,9 @@ name = "libborneo"
 version = "0.1.0"
 dependencies = [
  "async-std",
+ "base32",
  "futures",
+ "hex",
  "libp2p",
  "libsumatracrypt-rs",
  "serde",

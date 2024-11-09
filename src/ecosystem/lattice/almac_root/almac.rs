@@ -4,6 +4,8 @@ use crate::ecosystem::lattice::borsys::block::*;
 use crate::ecosystem::lattice::borsys::almac::*;
 use crate::internals::crypto::blake2b::BorneoBLAKE2B;
 
+use crate::internals::serde::{Serialize,Deserialize};
+
 /*
 MULTICAST
 
@@ -15,6 +17,7 @@ pub struct AlmacBlockHeader {
     bhash: String,
 }
 
+#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub struct AlmacBlockContents {
     id: BlockID,
     ba: BorneoAccount,
@@ -66,9 +69,18 @@ impl AlmacBlockContents {
             almac_tx: almac_tx
         }
     }
+    pub fn serialize(&self) -> String {
+        let serialized = serde_json::to_string(&self).expect("Failed To Serialize");
+        return serialized
+    }
+    pub fn deserialize<T: AsRef<str>>(serde: T) -> Self {
+        return serde_json::from_str(serde.as_ref()).expect("Failed to deserialize");
+    }
     pub fn hash(&self) -> String {
         let serialized = serde_json::to_string(self).expect("Failed To Serialize");
         let hash = BorneoBLAKE2B::new(serialized.as_bytes(),40usize);
         return hash
     }
 }
+
+

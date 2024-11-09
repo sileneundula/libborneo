@@ -1,12 +1,12 @@
 use crate::internals::serde::{Serialize,Deserialize};
 
-#[derive(Serialize,Deserialize,Clone,Copy,Hash,PartialEq,PartialOrd)]
+#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub struct AlmacVersion(String);
 
 #[derive(Serialize,Deserialize,Clone,Copy,Hash,PartialEq,PartialOrd)]
 pub struct AlmacAction(u32);
 
-#[derive(Serialize,Deserialize,Clone,Copy,Hash,PartialEq,PartialOrd)]
+#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub enum AlmacDefinitiveType {
     General,
     GLCC,

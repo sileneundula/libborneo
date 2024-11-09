@@ -1,5 +1,4 @@
 pub mod almac_root;
-pub mod openrepo;
 
 pub mod borsys;
 pub mod borneocrates;
