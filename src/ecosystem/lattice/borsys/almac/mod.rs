@@ -9,7 +9,7 @@ pub struct AlmacVersion(String);
 #[derive(Serialize,Deserialize,Clone,Copy,Hash,PartialEq,PartialOrd)]
 pub struct AlmacAction(u32);
 
-/// # \[ALMACSYS::0x0001] AlamcDefType (ADT)
+/// # \[ALMACSYS::0x0001] AlamcDefinitiveType (ADT)
 /// 
 /// ## Description
 /// 
@@ -19,7 +19,31 @@ pub struct AlmacAction(u32);
 /// 
 /// - Contract
 /// 
-/// - Position
+/// - Governance
+/// 
+/// - Organization
+/// 
+/// - Database
+/// 
+/// - Lament
+/// 
+/// - Pivot
+/// 
+/// - Registar
+/// 
+/// - Bank
+/// 
+/// - PKI
+/// 
+/// - Social
+/// 
+/// - Executable
+/// 
+/// - Bridge
+/// 
+/// - Connector
+/// 
+/// - Node
 /// 
 /// ### \[AlmacType::Core::0x00] General
 /// 
@@ -33,9 +57,21 @@ pub struct AlmacAction(u32);
 /// 
 /// A user custom built contract for performing certain transactions.
 /// 
-/// ### \[AlmacType::Position::0x00] Delegate Address
+/// ### \[AlmacType::Governance::0x00] Delegate Address
 /// 
-/// A delegate position. Delegates can be voted in,
+/// A delegate position. Delegates can be voted in, can offer services, and can make payments.
+/// 
+/// ### \[AlmacType::Org::0x00] DAO
+/// 
+/// A decentralized organization
+/// 
+/// ### \[AlmacType::DB::0x00] OpenDatabase
+/// 
+/// An opendatabase that is done p2p.
+/// 
+/// ### \[AlmacType::Lament::0x00] LamentSearch
+/// 
+/// An open search engine that uses tagging for finding data.
 #[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub enum AlmacDefinitiveType {
     // Core
@@ -50,15 +86,30 @@ pub enum AlmacDefinitiveType {
     DAO(u16),
 
     // DB
-    Database(u8),
+    OpenDatabase(u8), // Includes dbconnector
 
+    // LamentSearch
+    LamentSearch, // (LamSer)
+    LamentTagggingSystem, // (LamTagSys)
+    LamentIndex(u8),
+    LamentPivot,
+
+    // Pivot
     Pivot(u16),
+    
+    // Registar
     Registar(u16),
+    
+    // Bank
     Bank(u8),
     
     // PKI
     X59Authority(u16),
-    TrustWeb,
+    OpenTrustWeb, // (OTW)
+    AuthorityLinkTrust, // (ALT) | A Way of Linking together accounts
+
+    // Social
+    FedoraSocial, // A social account
     
     // Bridge
     GeneralBridge(u16),
@@ -74,7 +125,10 @@ pub enum AlmacDefinitiveType {
     BorneoBridgeStrg(u32),
 
     // Node
-    GeneralNode(u8),
+    GeneralNode(u16),
+
+    // Connector
+    Connector(u8)
 }
 
 #[derive(Serialize,Deserialize,Clone,Copy,Hash,PartialEq,PartialOrd)]
