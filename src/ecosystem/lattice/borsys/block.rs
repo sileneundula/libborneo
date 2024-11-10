@@ -3,7 +3,7 @@ use crate::internals::serde::{Serialize,Deserialize};
 use crate::internals::crypto::blake2b::BorneoBLAKE2B;
 use crate::internals::encoding::bs32::base32;
 
-/// # BlockID
+/// # \[Borsys::0x0001] BlockID
 /// 
 /// **BorsysIndex:** 0x0001
 /// **InternalType:** `u64`
@@ -36,7 +36,7 @@ use crate::internals::encoding::bs32::base32;
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BlockID(u64);
 
-/// # BorneoAccount
+/// # \[Borsys::0x0002] BorneoAccount
 /// 
 /// **BorsysIndex:** 0x0002
 /// 
@@ -60,7 +60,7 @@ pub struct BlockID(u64);
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoAccount(String);
 
-/// # BorneoBlockHash
+/// # \[Borsys::0x0003] BorneoBlockHash
 /// 
 /// **BorsysIndex:** 0x0003
 /// 
@@ -76,12 +76,34 @@ pub struct BorneoAccount(String);
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoBlockHash(String);
 
+/// # \[BorSys::0x0004] BorneoPublicKey
+/// 
+/// **Encoding:** Hexadecimal (Upper)
+/// 
+/// **SignatureAlgorithm:** ED25519
+/// 
+/// ## Description
+/// 
+/// The BorneoPublicKey exists as a `primitive type` for verifying digital signatures and computing the `BorneoAccount`.
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoPublicKey(String);
 
+/// # \[Borsys::0x0005] BorneoNonce
+/// 
+/// **Type:** `u64`
+/// 
+/// ## Description
+/// 
+/// The BorneoNonce acts as a nonce that can be used to calculate the pow required to make a tx.
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoNonce(u64);
 
+
+/// # \[Borsys::0x0006] BorneoLinkBlock
+/// 
+/// ## Description
+/// 
+/// The BorneoLinkBlock is used to link blocks to the previous transaction
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoLinkBlock(String);
 
