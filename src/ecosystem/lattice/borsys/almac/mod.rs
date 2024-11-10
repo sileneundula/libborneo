@@ -45,6 +45,8 @@ pub struct AlmacAction(u32);
 /// 
 /// - Node
 /// 
+/// - Slinky
+/// 
 /// ### \[AlmacType::Core::0x00] General
 /// 
 /// The basic type used for general transactions. This chain servers as a creator for other chains/blocks/txs.
@@ -128,7 +130,13 @@ pub enum AlmacDefinitiveType {
     GeneralNode(u16),
 
     // Connector
-    Connector(u8)
+    Connector(u8),
+
+    // OpenRepo
+    OpenRepo(u8),
+
+    // Slinky
+    SlinkyService(u8),
 }
 
 #[derive(Serialize,Deserialize,Clone,Copy,Hash,PartialEq,PartialOrd)]
