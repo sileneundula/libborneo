@@ -179,3 +179,20 @@ impl BorneoAccount {
         return &self.0
     }
 }
+
+impl BorneoLinkBlock {
+    pub fn from_str<T: AsRef<str>>(s: T) -> Self {
+        return Self(s.as_ref().to_string())
+    }
+    pub fn block_link(&self) -> &str {
+        return &self.0
+    }
+    pub fn compare_link<T: AsRef<str>>(&self, s: T) -> bool {
+        if &self.0 == s.as_ref() {
+            return true
+        }
+        else {
+            return false
+        }
+    }
+}
