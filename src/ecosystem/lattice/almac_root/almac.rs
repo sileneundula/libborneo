@@ -2,7 +2,7 @@
 
 use crate::ecosystem::lattice::borsys::block::*;
 use crate::ecosystem::lattice::borsys::almac::*;
-use crate::internals::crypto::blake2b::BorneoBLAKE2B;
+use crate::internals::crypto::hash::blake2b::BorneoBLAKE2B;
 
 use crate::internals::serde::{Serialize,Deserialize};
 
@@ -34,21 +34,12 @@ pub struct AlmacBlockContents {
     almac_version: AlmacVersion,
     almac_definitive_type: AlmacDefinitiveType,
     almac_tx: AlmacTxType,
+    almac_action: Option<AlmacAction>,
 
 
-}
-
-pub struct AlmacContainerBlock<T> {
-    // ALMAC CONTAINER
-    almac_meta: T,
-    almac_container: T,
 }
 
 pub struct AlmacBlockFooter {
-    contentshash: BorneoContentsHash,
-    containerhash: BorneoContainerHash,
-    sidehash: BorneoSidechainHash,
-
     footerhash: BorneoFooterHash,
     signature: SignatureED25519,
 }
@@ -66,7 +57,8 @@ impl AlmacBlockContents {
             
             almac_version: version,
             almac_definitive_type: almac_def_type,
-            almac_tx: almac_tx
+            almac_tx: almac_tx,
+            almac_action: None,
         }
     }
     pub fn serialize(&self) -> String {

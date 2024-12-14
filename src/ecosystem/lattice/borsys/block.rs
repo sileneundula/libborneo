@@ -1,6 +1,6 @@
 // Account Data
 use crate::internals::serde::{Serialize,Deserialize};
-use crate::internals::crypto::blake2b::BorneoBLAKE2B;
+use crate::internals::crypto::hash::blake2b::BorneoBLAKE2B;
 use crate::internals::encoding::bs32::base32;
 
 /// # \[Borsys::0x0001] BlockID

@@ -1,4 +1,6 @@
-pub mod blake2b;
-pub mod blake3;
+pub mod hash;
+
+
 pub mod ed25519;
-pub mod borneodigest;
+/// The Post-Quantum Lattice Cryptography Digital Signature Scheme using Falcon1024
+pub mod falcon;
