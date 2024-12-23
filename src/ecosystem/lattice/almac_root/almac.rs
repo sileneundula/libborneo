@@ -1,5 +1,7 @@
 // Current-State
 
+use libsumatracrypt_rs::signatures::ed25519::ED25519SecretKey;
+
 use crate::ecosystem::lattice::borsys::block::*;
 use crate::ecosystem::lattice::borsys::almac::*;
 use crate::internals::crypto::hash::blake2b::BorneoBLAKE2B;
@@ -45,6 +47,37 @@ pub struct AlmacBlockFooter {
 }
 
 impl AlmacBlockContents {
+    pub fn init(sk: ED25519SecretKey) -> Self {
+
+        // Public Key
+        let pk = sk.to_public_key();
+        
+        // Calculate BorneoAccount
+        let ba = BorneoAccount::get_from_ed25519_pk(pk.to_string());
+
+        // BorneoPublicKey
+        let borpk: BorneoPublicKey = BorneoPublicKey::from_str(pk.to_string());
+
+        // Link Hash For Init
+        let link_hash = BorneoBlockHash::from_str("InitialALMAC");
+
+        // Almac Version
+        let almac_version = AlmacVersion::from_str("Testnet");
+
+
+        
+        Self {
+            id: BlockID::from(0u64),
+            ba: ba,
+            pk: borpk,
+            entry_link_block: None,
+            link_hash: link_hash,
+            nonce: ,
+
+            almac_version: almac_version,
+            
+        }
+    }
     pub fn new(id: BlockID, ba: BorneoAccount, pk: BorneoPublicKey, link_hash: BorneoBlockHash, to: BorneoAccount, nonce: BorneoNonce, version: AlmacVersion, almac_def_type: AlmacDefinitiveType, almac_tx: AlmacTxType) -> Self {
         Self {
             id: id,

@@ -1,3 +1,5 @@
+use libsumatracrypt_rs::signatures::ed25519::ED25519PublicKey;
+
 // Account Data
 use crate::internals::serde::{Serialize,Deserialize};
 use crate::internals::crypto::hash::blake2b::BorneoBLAKE2B;
@@ -194,5 +196,14 @@ impl BorneoLinkBlock {
         else {
             return false
         }
+    }
+}
+
+impl BorneoPublicKey {
+    pub fn from_str<T: AsRef<str>>(pk: T) -> Self {
+        Self(pk.as_ref().to_string())
+    }
+    pub fn to_key(&self) -> ED25519PublicKey {
+        ED25519PublicKey::new(&self.0)
     }
 }

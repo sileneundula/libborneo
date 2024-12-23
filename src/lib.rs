@@ -15,3 +15,6 @@ pub mod errors;
 
 /// Wallet Functionality
 pub mod wallet;
+
+/// Simple-Interface for Keys
+pub mod keys;

@@ -1,6 +1,6 @@
-use crate::internals::crypto::blake2b;
+use crate::internals::crypto::hash::blake2b;
 use crate::internals::serde::{Serialize,Deserialize};
-use crate::internals::crypto::blake3;
+use crate::internals::crypto::hash::blake3;
 use crate::internals::serde::serde_json;
 
 use crate::ecosystem::lattice::borsys::block::*;

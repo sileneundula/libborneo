@@ -177,3 +177,9 @@ CHAINS:
 Have a custom blockchain which only use is to serve to collect the user data and act as entry points
 
 */
+
+impl AlmacVersion {
+    pub fn from_str<T: AsRef<str>>(s: T) -> Self {
+        Self(s.as_ref().to_string())
+    }
+}
