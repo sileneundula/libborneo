@@ -100,6 +100,17 @@ pub struct BorneoPublicKey(String);
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoNonce(u64);
 
+/// # \[Borsys::0x0005::01]
+/// 
+/// **Type:** `u64`
+/// 
+/// ## Description
+/// 
+/// BorneoNonceThreshold is a way of measuring different security levels for BorneoNonces.
+/// 
+/// It uses BLAKE2B to generate the hash. The nonce must cause the hash to be larger than a certain number to pass.
+pub struct BorneoNonceThreshold(u64);
+
 
 /// # \[Borsys::0x0006] BorneoLinkBlock
 /// 
@@ -205,5 +216,16 @@ impl BorneoPublicKey {
     }
     pub fn to_key(&self) -> ED25519PublicKey {
         ED25519PublicKey::new(&self.0)
+    }
+}
+
+impl BorneoNonce {
+    pub fn from(int: u64) -> Self {
+        return Self(int)
+    }
+    pub fn calculate(input: BorneoBlockHash, threshold: u64) -> Self {
+        loop {
+        
+        }
     }
 }

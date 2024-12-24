@@ -28,8 +28,6 @@ pub struct AlmacBlockContents {
     entry_link_block: Option<BorneoLinkBlock>, //maybe
     link_hash: BorneoBlockHash,
     to: BorneoAccount,
-    
-    nonce: BorneoNonce,
 
     // ALMAC
 
@@ -42,12 +40,13 @@ pub struct AlmacBlockContents {
 }
 
 pub struct AlmacBlockFooter {
+    target_threshold: BorneoNonceThreshold,
     footerhash: BorneoFooterHash,
     signature: SignatureED25519,
 }
 
 impl AlmacBlockContents {
-    pub fn init(sk: ED25519SecretKey) -> Self {
+    pub fn init(sk: ED25519SecretKey, type_of_almac: AlmacDefinitiveType) -> Self {
 
         // Public Key
         let pk = sk.to_public_key();
@@ -64,19 +63,26 @@ impl AlmacBlockContents {
         // Almac Version
         let almac_version = AlmacVersion::from_str("Testnet");
 
+        // Almac Transaction
+        let almac_tx = AlmacTxType::Genesis;
 
+        // Nonce
+        let nonce = BorneoNonce::from(0);
         
-        Self {
-            id: BlockID::from(0u64),
-            ba: ba,
-            pk: borpk,
-            entry_link_block: None,
-            link_hash: link_hash,
-            nonce: ,
-
-            almac_version: almac_version,
+        let block = Self {
+                id: BlockID::from(0u64),
+                ba: ba,
+                pk: borpk,
+                entry_link_block: None,
+                link_hash: link_hash,
+                almac_version: almac_version,
+                almac_definitive_type: type_of_almac,
+                to: ba.clone(),
+                almac_tx: almac_tx,
+                almac_action: None,
             
-        }
+            };
+    }
     }
     pub fn new(id: BlockID, ba: BorneoAccount, pk: BorneoPublicKey, link_hash: BorneoBlockHash, to: BorneoAccount, nonce: BorneoNonce, version: AlmacVersion, almac_def_type: AlmacDefinitiveType, almac_tx: AlmacTxType) -> Self {
         Self {
@@ -107,5 +113,3 @@ impl AlmacBlockContents {
         return hash
     }
 }
-
-
