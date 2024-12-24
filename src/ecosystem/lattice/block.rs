@@ -9,8 +9,8 @@ use crate::ecosystem::lattice::borsys::payment::BoreAmount;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Block {
-    pub account: BorneoAccount,
-    pub previous: BorneoBlockHash,
+    //pub account: BorneoAccount,
+    //pub previous: BorneoBlockHash,
     pub balance: BoreAmount,
     pub nonce: BorneoNonce,
     pub signature: SignatureED25519,

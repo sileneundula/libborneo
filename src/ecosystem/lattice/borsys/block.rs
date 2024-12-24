@@ -35,7 +35,7 @@ use crate::internals::encoding::bs32::base32;
 /// 
 /// }
 /// ```
-#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
+#[derive(Serialize,Deserialize,Clone,Copy,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BlockID(u64);
 
 /// # \[Borsys::0x0002] BorneoAccount
@@ -97,7 +97,7 @@ pub struct BorneoPublicKey(String);
 /// ## Description
 /// 
 /// The BorneoNonce acts as a nonce that can be used to calculate the pow required to make a tx.
-#[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
+#[derive(Serialize,Deserialize,Clone,Copy,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoNonce(u64);
 
 /// # \[Borsys::0x0005::01]
@@ -148,6 +148,9 @@ impl BlockID {
     pub fn block_id(&self) -> u64 {
         return self.0
     }
+    pub fn increment(&self) -> Self {
+        return Self(self.0 + 1u64)
+    }
 }
 
 impl BorneoBlockHash {
@@ -186,7 +189,7 @@ impl BorneoAccount {
         borneoaccount.push_str(Self::BAPREFIX_UNDERSCORE);
         borneoaccount.push_str(&bs32_z_encoded);
 
-        return Self(borneoaccount)
+        return Self(borneoaccount.as_str().to_string())
     }
     pub fn borneo_account(&self) -> &str {
         return &self.0
@@ -211,8 +214,8 @@ impl BorneoLinkBlock {
 }
 
 impl BorneoPublicKey {
-    pub fn from_str<T: AsRef<str>>(pk: T) -> Self {
-        Self(pk.as_ref().to_string())
+    pub fn from_str<T: AsRef<str>>(pk: T) -> BorneoPublicKey {
+        BorneoPublicKey(pk.as_ref().to_string())
     }
     pub fn to_key(&self) -> ED25519PublicKey {
         ED25519PublicKey::new(&self.0)

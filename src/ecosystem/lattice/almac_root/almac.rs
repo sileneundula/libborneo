@@ -1,3 +1,9 @@
+/// # ALMAC (Account Ledger Management)
+/// 
+/// The ALMAC is the basic structure of libborneo. It consists of a single chain that is used to create new blocks or chains.
+/// 
+/// It uses ED25519 to verify digital signatures.
+
 // Current-State
 
 use libsumatracrypt_rs::signatures::ed25519::ED25519SecretKey;
@@ -19,6 +25,7 @@ pub struct AlmacBlockHeader {
     bhash: String,
 }
 
+/// # ALMAC BLOCK CONTENTS
 #[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub struct AlmacBlockContents {
     id: BlockID,
@@ -28,9 +35,8 @@ pub struct AlmacBlockContents {
     entry_link_block: Option<BorneoLinkBlock>, //maybe
     link_hash: BorneoBlockHash,
     to: BorneoAccount,
-
+    
     // ALMAC
-
     almac_version: AlmacVersion,
     almac_definitive_type: AlmacDefinitiveType,
     almac_tx: AlmacTxType,
@@ -40,22 +46,24 @@ pub struct AlmacBlockContents {
 }
 
 pub struct AlmacBlockFooter {
+    nonce: BorneoNonce,
     target_threshold: BorneoNonceThreshold,
+
     footerhash: BorneoFooterHash,
     signature: SignatureED25519,
 }
 
 impl AlmacBlockContents {
-    pub fn init(sk: ED25519SecretKey, type_of_almac: AlmacDefinitiveType) -> Self {
+    pub fn genesis(sk: ED25519SecretKey, type_of_almac: AlmacDefinitiveType) -> Self {
 
         // Public Key
         let pk = sk.to_public_key();
         
         // Calculate BorneoAccount
-        let ba = BorneoAccount::get_from_ed25519_pk(pk.to_string());
+        let ba: BorneoAccount = BorneoAccount::get_from_ed25519_pk(pk.to_string().as_str());
 
         // BorneoPublicKey
-        let borpk: BorneoPublicKey = BorneoPublicKey::from_str(pk.to_string());
+        let borpk = BorneoPublicKey::from_str(&pk.to_string().as_str());
 
         // Link Hash For Init
         let link_hash = BorneoBlockHash::from_str("InitialALMAC");
@@ -75,6 +83,7 @@ impl AlmacBlockContents {
                 pk: borpk,
                 entry_link_block: None,
                 link_hash: link_hash,
+
                 almac_version: almac_version,
                 almac_definitive_type: type_of_almac,
                 to: ba.clone(),
@@ -83,8 +92,7 @@ impl AlmacBlockContents {
             
             };
     }
-    }
-    pub fn new(id: BlockID, ba: BorneoAccount, pk: BorneoPublicKey, link_hash: BorneoBlockHash, to: BorneoAccount, nonce: BorneoNonce, version: AlmacVersion, almac_def_type: AlmacDefinitiveType, almac_tx: AlmacTxType) -> Self {
+    pub fn new(id: BlockID, ba: BorneoAccount, pk: BorneoPublicKey, link_hash: BorneoBlockHash, to: BorneoAccount, version: AlmacVersion, almac_def_type: AlmacDefinitiveType, almac_tx: AlmacTxType) -> Self {
         Self {
             id: id,
             ba: ba,
@@ -92,7 +100,6 @@ impl AlmacBlockContents {
             entry_link_block: None,
             link_hash: link_hash,
             to: to,
-            nonce: nonce,
             
             almac_version: version,
             almac_definitive_type: almac_def_type,
