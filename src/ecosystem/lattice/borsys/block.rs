@@ -109,6 +109,8 @@ pub struct BorneoNonce(u64);
 /// BorneoNonceThreshold is a way of measuring different security levels for BorneoNonces.
 /// 
 /// It uses BLAKE2B to generate the hash. The nonce must cause the hash to be larger than a certain number to pass.
+#[derive(Serialize,Deserialize,Clone,Copy,Debug,PartialEq,PartialOrd,Hash)]
+
 pub struct BorneoNonceThreshold(u64);
 
 

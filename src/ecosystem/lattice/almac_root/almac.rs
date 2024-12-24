@@ -20,8 +20,19 @@ MULTICAST
 A multicast can be done to several chains
 
 */
+#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 
-pub struct AlmacBlockHeader {
+pub struct AlmacBlock {
+    // Contents
+    contents: AlmacBlockContents,
+    nonce: AlmacBlockNonce,
+
+    footer: AlmacBlockFooter,
+}
+
+
+#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
+pub struct AlmacBlockPublicHeader {
     bhash: String,
 }
 
@@ -45,6 +56,8 @@ pub struct AlmacBlockContents {
 
 }
 
+#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
+
 pub struct AlmacBlockFooter {
     nonce: BorneoNonce,
     target_threshold: BorneoNonceThreshold,
@@ -53,8 +66,15 @@ pub struct AlmacBlockFooter {
     signature: SignatureED25519,
 }
 
+#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
+pub struct AlmacBlockNonce {
+    contents: String,
+    nonce: BorneoNonce,
+    target: BorneoNonceThreshold,
+}
+
 impl AlmacBlockContents {
-    pub fn genesis(sk: ED25519SecretKey, type_of_almac: AlmacDefinitiveType) -> Self {
+    pub fn genesis(sk: ED25519SecretKey, type_of_almac: AlmacDefinitiveType) {
 
         // Public Key
         let pk = sk.to_public_key();
@@ -79,7 +99,7 @@ impl AlmacBlockContents {
         
         let block = Self {
                 id: BlockID::from(0u64),
-                ba: ba,
+                ba: ba.clone(),
                 pk: borpk,
                 entry_link_block: None,
                 link_hash: link_hash,
@@ -119,4 +139,23 @@ impl AlmacBlockContents {
         let hash = BorneoBLAKE2B::new(serialized.as_bytes(),40usize);
         return hash
     }
+}
+
+impl AlmacBlockNonce {
+    pub fn new(input: &[u8], threshold: u64) -> u64 {
+        let nonce: u64 = blake2b_pow::mine(input, threshold);
+
+        return nonce
+    }
+    pub fn verify(input: &[u8], nonce: u64, threshold: u64) -> bool {
+        return blake2b_pow::verify_nonce(input, threshold, nonce)
+    }
+}
+
+#[test]
+fn nonce() {
+    println!("Starting PoW");
+    //let x = AlmacBlockNonce::new(&[27u8;40],0xffffffc000000000);
+    let x = AlmacBlockNonce::verify(&[27u8;40], 10919841u64, 0xffffffc000000000);
+    println!("Nonce: {}",x);
 }

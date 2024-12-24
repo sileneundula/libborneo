@@ -24,3 +24,6 @@ async-std = "1.10.0"  # For async execution
 
 # Errors
 thiserror = "2.0.0"
+
+# Nonce
+blake2b-pow = "0.1.1"
