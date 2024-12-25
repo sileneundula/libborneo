@@ -7,6 +7,7 @@
 // Current-State
 
 use libsumatracrypt_rs::signatures::ed25519::ED25519SecretKey;
+use talkaddress::TalkAddress;
 
 use crate::ecosystem::lattice::borsys::block::*;
 use crate::ecosystem::lattice::borsys::almac::*;
@@ -22,10 +23,14 @@ A multicast can be done to several chains
 */
 #[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 
+/// # ALMACBLOCK
 pub struct AlmacBlock {
-    // Contents
+    // Contents + Nonce
     contents: AlmacBlockContents,
     nonce: AlmacBlockNonce,
+
+    // Pivot
+    talkaddr: AlmacBlockTalkAddress,
 
     footer: AlmacBlockFooter,
 }
@@ -43,7 +48,7 @@ pub struct AlmacBlockContents {
     ba: BorneoAccount,
     pk: BorneoPublicKey,
     
-    entry_link_block: Option<BorneoLinkBlock>, //maybe
+    entry_link_block: Option<BorneoLinkBlock>,
     link_hash: BorneoBlockHash,
     to: BorneoAccount,
     
@@ -71,6 +76,11 @@ pub struct AlmacBlockNonce {
     contents: String,
     nonce: BorneoNonce,
     target: BorneoNonceThreshold,
+}
+
+#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
+pub struct AlmacBlockTalkAddress {
+    address: talkaddress::TalkAddr,
 }
 
 impl AlmacBlockContents {

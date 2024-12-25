@@ -15,6 +15,7 @@ serde_yaml = "0.9.32"
 # Encoding
 base32 = "0.5.0"
 hex = "0.4.3"
+base58 = "0.2.0"
 
 libp2p = { version = "0.54.1", features = ["tcp", "tls", "dns", "async-std", "noise", "yamux", "websocket", "ping", "macros"]}
 
