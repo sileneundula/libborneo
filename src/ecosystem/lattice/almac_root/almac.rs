@@ -7,7 +7,7 @@
 // Current-State
 
 use libsumatracrypt_rs::signatures::ed25519::ED25519SecretKey;
-use talkaddress::TalkAddress;
+use crate::ecosystem::lattice::borsys::almac::talkaddress::TalkAddr;
 
 use crate::ecosystem::lattice::borsys::block::*;
 use crate::ecosystem::lattice::borsys::almac::*;
@@ -78,6 +78,9 @@ pub struct AlmacBlockNonce {
     target: BorneoNonceThreshold,
 }
 
+/// # ALMAC BLOCK TALK ADDR
+/// 
+/// **TalkAddr** is the root point of the talkr address.
 #[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub struct AlmacBlockTalkAddress {
     address: talkaddress::TalkAddr,
