@@ -24,10 +24,13 @@ A multicast can be done to several chains
 #[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 
 /// # ALMACBLOCK
-pub struct AlmacBlock {
+pub struct AlmacBlock<T> {
     // Contents + Nonce
     contents: AlmacBlockContents,
     nonce: AlmacBlockNonce,
+
+    // Type-Specific
+    specific: T,
 
     // Pivot
     footer: AlmacBlockFooter,
@@ -35,9 +38,13 @@ pub struct AlmacBlock {
     talkaddr: AlmacBlockTalkAddress,
 }
 
-impl AlmacBlock {
+impl<T> AlmacBlock<T> {
     pub fn genesis(sk: ED25519SecretKey, almac_type: AlmacDefinitiveType) {
+        // Contents
         let contents = AlmacBlockContents::genesis(sk, almac_type);
+        let hash = contents.hash();
+
+        let nonce = AlmacBlockNonce::calculate(hash)
     }
 }
 
@@ -172,6 +179,18 @@ impl AlmacBlockContents {
 }
 
 impl AlmacBlockNonce {
+    pub fn calculate<T: AsRef<str>>(contents_hash: T) -> Self {
+        let bytes = Self::decode_from_hex(contents_hash);
+
+        Self::new(bytes, )
+        
+        Self {
+            nonce:
+        }
+    }
+    fn decode_from_hex<T: AsRef<str>>(s: T) -> Vec<u8> {
+        return hex::decode(s.as_ref()).expect("Failed To Decode From Hex")
+    }
     pub fn new(input: &[u8], threshold: u64) -> u64 {
         let nonce: u64 = blake2b_pow::mine(input, threshold);
 
