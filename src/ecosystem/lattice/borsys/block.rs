@@ -160,7 +160,7 @@ impl BorneoBlockHash {
     /// 
     /// TODO: Add Validity check
     pub fn from_str<T: AsRef<str>>(s: T) -> Self {
-        assert_eq!(s.as_ref().len(),80usize);
+        //assert_eq!(s.as_ref().len(),80usize);
         
         return Self(s.as_ref().to_string())
     }

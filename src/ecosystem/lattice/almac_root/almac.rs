@@ -30,9 +30,15 @@ pub struct AlmacBlock {
     nonce: AlmacBlockNonce,
 
     // Pivot
-    talkaddr: AlmacBlockTalkAddress,
-
     footer: AlmacBlockFooter,
+
+    talkaddr: AlmacBlockTalkAddress,
+}
+
+impl AlmacBlock {
+    pub fn genesis(sk: ED25519SecretKey, almac_type: AlmacDefinitiveType) {
+        let contents = AlmacBlockContents::genesis(sk, almac_type);
+    }
 }
 
 
@@ -81,13 +87,18 @@ pub struct AlmacBlockNonce {
 /// # ALMAC BLOCK TALK ADDR
 /// 
 /// **TalkAddr** is the root point of the talkr address.
+/// 
+/// A hidden address can also be created by using Talkr to create a hash using a key.
 #[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub struct AlmacBlockTalkAddress {
     address: talkaddress::TalkAddr,
+    
+    public_header_address: talkaddress::TalkAddr,
+    ownedaddress: Option<talkaddress::TalkAddr>
 }
 
 impl AlmacBlockContents {
-    pub fn genesis(sk: ED25519SecretKey, type_of_almac: AlmacDefinitiveType) {
+    pub fn genesis(sk: ED25519SecretKey, type_of_almac: AlmacDefinitiveType) -> Self {
 
         // Public Key
         let pk = sk.to_public_key();
@@ -110,20 +121,21 @@ impl AlmacBlockContents {
         // Nonce
         let nonce = BorneoNonce::from(0);
         
+        // Contents Block
         let block = Self {
                 id: BlockID::from(0u64),
                 ba: ba.clone(),
                 pk: borpk,
                 entry_link_block: None,
                 link_hash: link_hash,
-
                 almac_version: almac_version,
                 almac_definitive_type: type_of_almac,
                 to: ba.clone(),
                 almac_tx: almac_tx,
                 almac_action: None,
-            
             };
+        // Hash
+        return block
     }
     pub fn new(id: BlockID, ba: BorneoAccount, pk: BorneoPublicKey, link_hash: BorneoBlockHash, to: BorneoAccount, version: AlmacVersion, almac_def_type: AlmacDefinitiveType, almac_tx: AlmacTxType) -> Self {
         Self {
@@ -148,9 +160,14 @@ impl AlmacBlockContents {
         return serde_json::from_str(serde.as_ref()).expect("Failed to deserialize");
     }
     pub fn hash(&self) -> String {
-        let serialized = serde_json::to_string(self).expect("Failed To Serialize");
+        let serialized = serde_json::to_string(&self).expect("Failed To Serialize");
         let hash = BorneoBLAKE2B::new(serialized.as_bytes(),40usize);
         return hash
+    }
+    pub fn pretty_print(&self) {
+        let serialized = serde_json::to_string_pretty(&self).expect("Failed To Serialize");
+        println!("{}",serialized);
+
     }
 }
 
@@ -171,4 +188,13 @@ fn nonce() {
     //let x = AlmacBlockNonce::new(&[27u8;40],0xffffffc000000000);
     let x = AlmacBlockNonce::verify(&[27u8;40], 10919841u64, 0xffffffc000000000);
     println!("Nonce: {}",x);
+}
+
+#[test]
+fn creation() {
+    use crate::keys::GenerateKeypair;
+    let (sk,pk) = GenerateKeypair::new();
+
+    let block = AlmacBlockContents::genesis(sk, AlmacDefinitiveType::General);
+    block.pretty_print();
 }
