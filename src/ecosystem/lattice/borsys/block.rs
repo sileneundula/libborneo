@@ -131,6 +131,12 @@ pub struct BorneoContainerHash(String);
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoFooterHash(String);
 
+impl BorneoFooterHash {
+    pub fn from<T: AsRef<str>>(s: T) -> Self {
+        Self(s.as_ref().to_string())
+    }
+}
+
 #[derive(Serialize,Deserialize,Clone,Debug,PartialEq,PartialOrd,Hash)]
 pub struct BorneoSidechainHash(String);
 

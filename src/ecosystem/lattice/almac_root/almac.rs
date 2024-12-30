@@ -7,6 +7,7 @@
 // Current-State
 
 use libsumatracrypt_rs::signatures::ed25519::ED25519SecretKey;
+use libsumatracrypt_rs::signatures::ed25519::ED25519Signature;
 use crate::ecosystem::lattice::borsys::almac::talkaddress::TalkAddr;
 
 use crate::ecosystem::lattice::borsys::block::*;
@@ -14,6 +15,7 @@ use crate::ecosystem::lattice::borsys::almac::*;
 use crate::internals::crypto::hash::blake2b::BorneoBLAKE2B;
 
 use crate::internals::serde::{Serialize,Deserialize};
+use crate::primitives::proofofwork::NonceThresholdLevel;
 
 /*
 MULTICAST
@@ -21,30 +23,42 @@ MULTICAST
 A multicast can be done to several chains
 
 */
-#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
+#[derive(Serialize,Deserialize,Clone)]
 
 /// # ALMACBLOCK
-pub struct AlmacBlock<T> {
+pub struct AlmacBlock {
     // Contents + Nonce
     contents: AlmacBlockContents,
     nonce: AlmacBlockNonce,
 
-    // Type-Specific
-    specific: T,
-
     // Pivot
     footer: AlmacBlockFooter,
 
-    talkaddr: AlmacBlockTalkAddress,
+    //talkaddr: AlmacBlockTalkAddress,
 }
 
-impl<T> AlmacBlock<T> {
-    pub fn genesis(sk: ED25519SecretKey, almac_type: AlmacDefinitiveType) {
+impl AlmacBlock {
+    pub fn genesis(sk: ED25519SecretKey, almac_type: AlmacDefinitiveType) -> Self {
         // Contents
-        let contents = AlmacBlockContents::genesis(sk, almac_type);
-        let hash = contents.hash();
+        let contents = AlmacBlockContents::genesis(sk.clone(), almac_type);
+        let hash = contents.digest();
 
-        let nonce = AlmacBlockNonce::calculate(hash)
+        let nonce = AlmacBlockNonce::calculate(hash);
+        let nonce_hash = nonce.digest();
+
+        let footer = AlmacBlockFooter::new(&contents, &nonce, sk.clone());
+
+        Self {
+            contents: contents,
+            nonce: nonce,
+            footer: footer,
+        }
+    }
+    pub fn serialize(&self) -> String {
+        serde_json::to_string_pretty(&self).expect("Failed to convert")
+    }
+    pub fn pretty_print(&self) {
+        println!("{}",self.serialize())
     }
 }
 
@@ -74,21 +88,38 @@ pub struct AlmacBlockContents {
 
 }
 
-#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
+#[derive(Serialize,Deserialize,Clone)]
 
 pub struct AlmacBlockFooter {
-    nonce: BorneoNonce,
-    target_threshold: BorneoNonceThreshold,
-
     footerhash: BorneoFooterHash,
-    signature: SignatureED25519,
+    signature: ED25519Signature,
+}
+
+impl AlmacBlockFooter {
+    pub fn new(almac: &AlmacBlockContents, nonce: &AlmacBlockNonce, sk: ED25519SecretKey) -> Self {
+        let mut output = String::new();
+        let almac_hash = almac.digest();
+        let nonce_hash = nonce.digest();
+
+        output.push_str(&almac_hash);
+        output.push_str(&nonce_hash);
+        
+        let digest = BorneoBLAKE2B::new(output.as_bytes(), 40);
+        let signature = sk.sign(digest.clone());
+
+        Self {
+            footerhash: BorneoFooterHash::from(digest.clone()),
+            signature: signature,
+        }
+
+    }
 }
 
 #[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub struct AlmacBlockNonce {
     contents: String,
     nonce: BorneoNonce,
-    target: BorneoNonceThreshold,
+    target: NonceThresholdLevel,
 }
 
 /// # ALMAC BLOCK TALK ADDR
@@ -98,10 +129,14 @@ pub struct AlmacBlockNonce {
 /// A hidden address can also be created by using Talkr to create a hash using a key.
 #[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub struct AlmacBlockTalkAddress {
+    // TalkrAddr
     address: talkaddress::TalkAddr,
     
+    // HeaderAddress
     public_header_address: talkaddress::TalkAddr,
-    ownedaddress: Option<talkaddress::TalkAddr>
+    
+    // Sidechain
+    ownedaddress: Option<talkaddress::TalkAddr>,
 }
 
 impl AlmacBlockContents {
@@ -166,7 +201,7 @@ impl AlmacBlockContents {
     pub fn deserialize<T: AsRef<str>>(serde: T) -> Self {
         return serde_json::from_str(serde.as_ref()).expect("Failed to deserialize");
     }
-    pub fn hash(&self) -> String {
+    pub fn digest(&self) -> String {
         let serialized = serde_json::to_string(&self).expect("Failed To Serialize");
         let hash = BorneoBLAKE2B::new(serialized.as_bytes(),40usize);
         return hash
@@ -180,12 +215,15 @@ impl AlmacBlockContents {
 
 impl AlmacBlockNonce {
     pub fn calculate<T: AsRef<str>>(contents_hash: T) -> Self {
-        let bytes = Self::decode_from_hex(contents_hash);
+        let hash = contents_hash.as_ref();
+        let bytes = Self::decode_from_hex(&contents_hash);
 
-        Self::new(bytes, )
+        let x=  Self::new(&bytes, 0xffffffc000000000u64);
         
         Self {
-            nonce:
+            nonce: BorneoNonce::from(x),
+            contents: hash.to_owned(),
+            target: NonceThresholdLevel::level3(),
         }
     }
     fn decode_from_hex<T: AsRef<str>>(s: T) -> Vec<u8> {
@@ -198,6 +236,12 @@ impl AlmacBlockNonce {
     }
     pub fn verify(input: &[u8], nonce: u64, threshold: u64) -> bool {
         return blake2b_pow::verify_nonce(input, threshold, nonce)
+    }
+    pub fn serialize(&self) -> String {
+        return serde_json::to_string(self).expect("Failed to convert to JSON For Nonce")
+    }
+    pub fn digest(&self) -> String {
+        return BorneoBLAKE2B::new(self.serialize().as_bytes(), 40)
     }
 }
 
