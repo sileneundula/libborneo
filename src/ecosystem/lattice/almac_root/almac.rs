@@ -60,6 +60,13 @@ impl AlmacBlock {
     pub fn pretty_print(&self) {
         println!("{}",self.serialize())
     }
+    pub fn add_block(block: AlmacBlock, tx_type: AlmacTxType, action: AlmacAction, to: BorneoAccount) {
+    }
+    pub fn verify_block(block: AlmacBlock) {
+        let contents = block.contents;
+        let nonce = block.nonce;
+        let footer = block.footer;
+    }
 }
 
 
