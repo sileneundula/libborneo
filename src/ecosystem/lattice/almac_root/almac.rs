@@ -138,7 +138,7 @@ impl AlmacBlockFooter {
 
         let is_signature_valid = pk.to_key().verify(digest, self.signature);
 
-        if self.footerhash == digest && is_signature_valid == true {
+        if self.footerhash == BorneoFooterHash(digest) && is_signature_valid == true {
             return true
         }
         else {
