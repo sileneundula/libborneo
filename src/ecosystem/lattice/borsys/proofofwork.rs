@@ -16,5 +16,8 @@ impl NonceThresholdLevel {
     pub fn level3() -> Self {
         return Self(0xffffffc000000000u64)
     }
+    pub fn target(&self) -> u64 {
+        return self.0
+    }
 }
 

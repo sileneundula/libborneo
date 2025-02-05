@@ -66,6 +66,9 @@ impl AlmacBlock {
         let contents = block.contents;
         let nonce = block.nonce;
         let footer = block.footer;
+
+        let contents_digest = contents.digest();
+        let nonce_digest = nonce.digest();
     }
 }
 
@@ -118,6 +121,32 @@ impl AlmacBlockFooter {
             footerhash: BorneoFooterHash::from(digest.clone()),
             signature: signature,
         }
+
+    }
+    pub fn verify(&self, almac: &AlmacBlockContents, nonce: &AlmacBlockNonce) -> bool {
+        let pk = almac.pk;
+
+        let mut output = String::new();
+
+        let almac_hash = almac.digest();
+        let nonce_hash = nonce.digest();
+
+        output.push_str(&almac_hash);
+        output.push_str(&nonce_hash);
+
+        let digest = BorneoBLAKE2B::new(output.as_bytes(), 40);
+
+        let is_signature_valid = pk.to_key().verify(digest, self.signature);
+
+        if self.footerhash == digest && is_signature_valid == true {
+            return true
+        }
+        else {
+            return false
+        }
+
+
+
 
     }
 }
@@ -249,6 +278,9 @@ impl AlmacBlockNonce {
     }
     pub fn digest(&self) -> String {
         return BorneoBLAKE2B::new(self.serialize().as_bytes(), 40)
+    }
+    pub fn verify_self(&self) -> bool {
+        blake2b_pow::verify_nonce(&hex::decode(self.contents.clone()).unwrap(), self.target.target(), self.nonce.nonce())
     }
 }
 

@@ -234,9 +234,7 @@ impl BorneoNonce {
     pub fn from(int: u64) -> Self {
         return Self(int)
     }
-    pub fn calculate(input: BorneoBlockHash, threshold: u64) -> Self {
-        loop {
-        
-        }
+    pub fn nonce(&self) -> u64 {
+        return self.0
     }
 }
