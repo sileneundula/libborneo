@@ -3,6 +3,8 @@ use crate::internals::serde::{Serialize,Deserialize};
 /// TalkAddr
 pub mod talkaddress;
 
+pub mod addressing;
+
 /// # [ALMACSYS::0x0000] ALMACVERSION
 /// 
 /// The ALMACVERSION contains the current version of ALMAC being used
@@ -161,6 +163,8 @@ pub enum AlmacTxType {
     Sort,
     
     // Almac
+    InitSetupChain, // Setup Chain
+
     InitGeneralChain(u16),
     InitGeneralBlock(u32),
 

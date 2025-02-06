@@ -17,6 +17,8 @@ use crate::internals::crypto::hash::blake2b::BorneoBLAKE2B;
 use crate::internals::serde::{Serialize,Deserialize};
 use crate::primitives::proofofwork::NonceThresholdLevel;
 
+use crate::primitives::almac::addressing::*;
+
 /*
 MULTICAST
 
@@ -26,15 +28,20 @@ A multicast can be done to several chains
 #[derive(Serialize,Deserialize,Clone)]
 
 /// # ALMACBLOCK
-pub struct AlmacBlock {
+pub struct AlmacBlock<T> {
     // Contents + Nonce
     contents: AlmacBlockContents,
     nonce: AlmacBlockNonce,
+
+    // Customizable Container
+    tx_container: T,
 
     // Pivot
     footer: AlmacBlockFooter,
 
     //talkaddr: AlmacBlockTalkAddress,
+
+    addressing: AddressingContents,
 }
 
 impl AlmacBlock {
@@ -76,6 +83,16 @@ impl AlmacBlock {
 #[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
 pub struct AlmacBlockPublicHeader {
     bhash: String,
+}
+
+#[derive(Serialize,Deserialize,Clone,Hash,PartialEq,PartialOrd)]
+pub struct AddressingContents {
+    address: String, // Address of Init-Chain
+    relationship: AddressRelationship,
+    
+
+    public_key: String,
+    signature: String,
 }
 
 /// # ALMAC BLOCK CONTENTS
@@ -124,7 +141,7 @@ impl AlmacBlockFooter {
 
     }
     pub fn verify(&self, almac: &AlmacBlockContents, nonce: &AlmacBlockNonce) -> bool {
-        let pk = almac.pk;
+        let pk = almac.pk.clone();
 
         let mut output = String::new();
 
@@ -136,9 +153,9 @@ impl AlmacBlockFooter {
 
         let digest = BorneoBLAKE2B::new(output.as_bytes(), 40);
 
-        let is_signature_valid = pk.to_key().verify(digest, self.signature);
+        let is_signature_valid = pk.to_key().verify(digest.clone(), self.signature.clone());
 
-        if self.footerhash == BorneoFooterHash(digest) && is_signature_valid == true {
+        if self.footerhash == BorneoFooterHash::from(digest.clone()) && is_signature_valid == true {
             return true
         }
         else {
@@ -246,6 +263,11 @@ impl AlmacBlockContents {
         let serialized = serde_json::to_string_pretty(&self).expect("Failed To Serialize");
         println!("{}",serialized);
 
+    }
+    pub fn logic(&self) {
+        let action: Option<AlmacAction> = self.almac_action;
+        let tx_type: AlmacTxType = self.almac_tx;
+        let 
     }
 }
 
