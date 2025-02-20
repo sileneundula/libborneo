@@ -34,6 +34,7 @@ pub struct AlmacBlock<T> {
     nonce: AlmacBlockNonce,
 
     // Customizable Container
+    tx_container_type: AlmacTxType,
     tx_container: T,
 
     // Pivot
