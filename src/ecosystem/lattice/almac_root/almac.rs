@@ -35,7 +35,8 @@ pub struct AlmacBlock<T> {
 
     // Customizable Container
     tx_container_type: AlmacTxType,
-    tx_container: T,
+    tx_action: AlmacAction,
+    tx_container: T, // Serialize to JSON
 
     // Pivot
     footer: AlmacBlockFooter,
@@ -50,6 +51,7 @@ impl AlmacBlock {
         // Contents
         let contents = AlmacBlockContents::genesis(sk.clone(), almac_type);
         let hash = contents.digest();
+        let contents_logic = contents.logic();
 
         let nonce = AlmacBlockNonce::calculate(hash);
         let nonce_hash = nonce.digest();
@@ -265,10 +267,20 @@ impl AlmacBlockContents {
         println!("{}",serialized);
 
     }
-    pub fn logic(&self) {
+    pub fn logic(&self) -> (AlmacTxType,Option<AlmacAction>) {
         let action: Option<AlmacAction> = self.almac_action;
         let tx_type: AlmacTxType = self.almac_tx;
-        let 
+
+        return (tx_type,action)
+    }
+    pub fn send_address(&self) -> BorneoAccount {
+        return self.to.clone()
+    }
+    pub fn receive_address(&self) -> BorneoAccount {
+        return self.ba.clone()
+    }
+    pub fn public_key(&self) -> BorneoPublicKey {
+        return self.pk.clone()
     }
 }
 

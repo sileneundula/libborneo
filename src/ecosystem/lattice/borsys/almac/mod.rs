@@ -146,10 +146,38 @@ pub enum AlmacDefinitiveType {
 
 #[derive(Serialize,Deserialize,Clone,Copy,Hash,PartialEq,PartialOrd)]
 pub enum AlmacTxType {
-    Genesis,
+    Genesis, // [0x0000] Genesis Tx
     
     // Registration
-    Register,
+    Register, // [0x0001] Register Tx
+    RegisterDelegate, // [0x0002] Register Delegate Tx
+    RegisterDAO, // [0x0003] Register DAO Tx
+    RegisterBank, // [0x0004] Register Bank Tx
+    RegisterX59Authority, // [0x0005] Register X59 Authority Tx
+    RegisterOpenTrustWeb, // [0x0006] Register Open Trust Web Tx
+    RegisterAuthorityLinkTrust, // [0x0007] Register Authority Link Trust Tx
+    RegisterFedoraSocial, // [0x0008] Register Fedora Social Tx
+    RegisterOpenDatabase, // [0x0009] Register Open Database Tx
+    RegisterLamentSearch, // [0x000A] Register Lament Search Tx
+    RegisterLamentTaggingSystem, // [0x000B] Register Lament Tagging System Tx
+    RegisterLamentIndex, // [0x000C] Register Lament Index Tx
+    RegisterLamentPivot, // [0x000D] Register Lament Pivot Tx
+    RegisterRegistar, // [0x000E] Register Registar Tx
+    RegisterStrg, // [0x000F] Register Strg Tx
+    RegisterCollection, // [0x0010] Register Collection Tx
+    RegisterExecutable, // [0x0011] Register Executable Tx
+    RegisterScript, // [0x0012] Register Script Tx
+    RegisterBorneoBridgeStrg, // [0x0013] Register Borneo Bridge Strg Tx
+    RegisterGeneralNode, // [0x0014] Register General Node Tx
+    RegisterConnector, // [0x0015] Register Connector Tx
+    RegisterOpenRepo, // [0x0016] Register Open Repo Tx
+    RegisterSlinkyService, // [0x0017] Register Slinky Service Tx
+    RegisterGeneralBridge, // [0x0018] Register General Bridge Tx
+    RegisterBorneoBridge, // [0x0019] Register Borneo Bridge Tx
+
+    InitPaymentSystem, // [0x001A] Init Payment System Tx
+    InitVotingSystem, // [0x001B] Init Voting System Tx
+    InitCertificateSystem, // [0x001C] Init Certificate System Tx
     
     // Common
     Send,
@@ -164,6 +192,8 @@ pub enum AlmacTxType {
     
     // Almac
     InitSetupChain, // Setup Chain
+
+    InitGeneralChain,
 
     InitGeneralChain(u16),
     InitGeneralBlock(u32),
