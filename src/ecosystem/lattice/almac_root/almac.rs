@@ -46,7 +46,7 @@ pub struct AlmacBlock<T> {
     addressing: AddressingContents,
 }
 
-impl AlmacBlock {
+impl<T> AlmacBlock<T> {
     pub fn genesis(sk: ED25519SecretKey, almac_type: AlmacDefinitiveType) -> Self {
         // Contents
         let contents = AlmacBlockContents::genesis(sk.clone(), almac_type);
@@ -60,8 +60,15 @@ impl AlmacBlock {
 
         Self {
             contents: contents,
+
+            tx_container_type: contents_logic.0,
+            tx_action: contents_logic.1.unwrap_or(AlmacAction::from(0u32)),
+            tx_container: String::new(),
+
             nonce: nonce,
             footer: footer,
+
+            addressing: AddressingContents::new(),
         }
     }
     pub fn serialize(&self) -> String {
